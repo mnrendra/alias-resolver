@@ -60,38 +60,60 @@ describe('Test all features:', () => {
         unmockParse(mockedParse)
       })
 
-      it('Should resolve all `import` aliases from the `source.code`!', () => {
-        const source = importsDummy.source()
-        index(aliases, source)
-        const received = source.code
-        const expected = importsDummy.expectedCode
-        expect(received).toBe(expected)
+      describe('Test the `module` source code:', () => {
+        it('Should resolve all `import` aliases from the `source.code`!', () => {
+          const source = importsDummy.source()
+          index(aliases, source)
+          const received = source.code
+          const expected = importsDummy.expectedCode
+          expect(received).toBe(expected)
+        })
+
+        it('Should resolve all `import` aliases from the `source.code` without `source.type`!', () => {
+          const source = importsDummy.source()
+          delete source.type
+          index(aliases, source)
+          const received = source.code
+          const expected = importsDummy.expectedCode
+          expect(received).toBe(expected)
+        })
+
+        it('Should resolve all `import` aliases from the `source.code` by reversing the source type!', () => {
+          const source = importsDummy.source()
+          source.type = 'script'
+          index(aliases, source)
+          const received = source.code
+          const expected = importsDummy.expectedCode
+          expect(received).toBe(expected)
+        })
       })
 
-      it('Should resolve all `import` aliases from the `source.code` without `source.type`!', () => {
-        const source = importsDummy.source()
-        delete source.type
-        index(aliases, source)
-        const received = source.code
-        const expected = importsDummy.expectedCode
-        expect(received).toBe(expected)
-      })
+      describe('Test the `script` source code:', () => {
+        it('Should resolve all `require` aliases from the `source.code`!', () => {
+          const source = requiresDummy.source()
+          index(aliases, source)
+          const received = source.code
+          const expected = requiresDummy.expectedCode
+          expect(received).toBe(expected)
+        })
 
-      it('Should resolve all `require` aliases from the `source.code`!', () => {
-        const source = requiresDummy.source()
-        index(aliases, source)
-        const received = source.code
-        const expected = requiresDummy.expectedCode
-        expect(received).toBe(expected)
-      })
+        it('Should resolve all `require` aliases from the `source.code` without `source.type`!', () => {
+          const source = requiresDummy.source()
+          delete source.type
+          index(aliases, source)
+          const received = source.code
+          const expected = requiresDummy.expectedCode
+          expect(received).toBe(expected)
+        })
 
-      it('Should resolve all `require` aliases from the `source.code` without `source.type`!', () => {
-        const source = requiresDummy.source()
-        delete source.type
-        index(aliases, source)
-        const received = source.code
-        const expected = requiresDummy.expectedCode
-        expect(received).toBe(expected)
+        it('Should resolve all `require` aliases from the `source.code` by reversing the source type!', () => {
+          const source = requiresDummy.source()
+          source.type = 'module'
+          index(aliases, source)
+          const received = source.code
+          const expected = requiresDummy.expectedCode
+          expect(received).toBe(expected)
+        })
       })
     })
   })
