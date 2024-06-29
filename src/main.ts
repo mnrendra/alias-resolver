@@ -47,8 +47,8 @@ const main = (
       throw err
     }
 
-    // Retry by modifying the `source.type`.
-    source.type = 'module'
+    // If the error is regarding the source type, modify the `source.type`.
+    source.type = source.type === 'script' ? 'module' : 'script'
 
     // Reinvoke this function to redo using modified `source.type`.
     main(aliases, source)
