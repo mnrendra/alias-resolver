@@ -13,8 +13,10 @@ interface Source {
 
   /**
    * The source code type, either `'script'` or `'module'`.
+   *
+   * @default 'script'
    */
-  type: Options['sourceType']
+  type?: Options['sourceType']
 }
 
 export default Source
