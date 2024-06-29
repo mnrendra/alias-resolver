@@ -14,20 +14,24 @@ const resolveAlias = require('@mnrendra/alias-resolver')
 
 const aliases = [
   {
-    '@': './src',
-    '@tests': './tests'
+    'alias': '@',
+    'path': './src'
+  },
+  {
+    'alias': '@tests',
+    'path': './tests'
   }
 ]
 
 const source = {
-  path: '[absolute-path]/[project-dir]/src/main/index.js',
+  path: '[absolute-path]/[project-directory]/src/main/index.js',
   code: 'const foo = require("@/foo");const { mocks } = require("@tests")',
   type: 'script'
 }
 
-const generatedCode = resolveAlias(aliases, source)
+resolveAlias(aliases, source)
 
-console.log(generatedCode) // Output: const foo = require("../foo");const { mocks } = require("../../tests")
+console.log(source.code) // Output: const foo = require('../foo');const {mocks} = require('../../tests')
 ```
 
 Using `ES Module`:
@@ -36,20 +40,24 @@ import resolveAlias from  '@mnrendra/alias-resolver'
 
 const aliases = [
   {
-    '@': './src',
-    '@tests': './tests'
+    'alias': '@',
+    'path': './src'
+  },
+  {
+    'alias': '@tests',
+    'path': './tests'
   }
 ]
 
 const source = {
-  path: '[absolute-path]/[project-dir]/src/main/index.mjs',
+  path: '[absolute-path]/[project-directory]/src/main/index.mjs',
   code: 'import foo from "@/foo";import { mocks } from "@tests"',
   type: 'module'
 }
 
-const generatedCode = resolveAlias(aliases, source)
+resolveAlias(aliases, source)
 
-console.log(generatedCode) // Output: import foo from "../foo";import { mocks } from "../../tests"
+console.log(source.code) // Output: import foo from '../foo';import { mocks } from '../../tests'
 ```
 
 # Types

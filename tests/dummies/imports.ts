@@ -2,11 +2,13 @@ import type { Literal, Options, Program } from 'acorn'
 
 import type { Source } from '@types'
 
-import { resolve, sep } from 'node:path'
+import { resolve } from 'node:path'
 
 export const type: Options['sourceType'] = 'module'
 
-export const path: string = resolve(`.${sep}src${sep}main${sep}index.mjs`)
+export const path: string = resolve('./src/main/index.mjs')
+
+export const pathInSameDir: string = resolve('./src/index.mjs')
 
 export const code: string = `
 /**
@@ -66,7 +68,7 @@ export {
 }
 `
 
-export const program: Program = {
+export const program = (): Program => ({
   type: 'Program',
   start: 0,
   end: 739,
@@ -747,7 +749,7 @@ export const program: Program = {
     }
   ],
   sourceType: 'module'
-}
+})
 
 export const literal: Literal = {
   type: 'Literal',
@@ -790,4 +792,48 @@ export {
     dummy
 };`
 
-export const source = (): Source => ({ path, code, type })
+export const expectedCodeInSameDir: string = '' +
+`import * as consts from './consts';
+import { urls as url } from './consts';
+import * as urls from './consts/urls';
+import { api } from './consts/urls';
+import utils, { logs } from './utils';
+import info from './utils/logs/info';
+import { login } from '../share/services';
+import * as share from '../share';
+import sanity, { apis } from './share';
+import * as tests from '../tests';
+import { mocks } from '../tests';
+import mock, {
+    data,
+    dummy
+} from '../tests/mocks';
+export {
+    consts,
+    url,
+    urls,
+    api,
+    utils,
+    logs,
+    info,
+    login,
+    share,
+    sanity,
+    apis,
+    tests,
+    mocks,
+    mock,
+    data,
+    dummy
+};`
+
+export const source = (): Source => ({
+  path,
+  code,
+  type
+})
+
+export const sourceInSameDir = (): Source => ({
+  path: pathInSameDir,
+  code
+})

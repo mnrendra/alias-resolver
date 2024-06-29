@@ -2,7 +2,9 @@ import type { Literal } from 'acorn'
 
 import type { Aliases } from '../types'
 
-import { dirname, join, relative, resolve, sep } from 'node:path'
+import { dirname, join, relative, resolve } from 'node:path'
+
+import validateRelativePath from './validateRelativePath'
 
 /**
  * Replace all aliases with relative paths.
@@ -24,30 +26,33 @@ const replaceAliases = (
     // Only handle if the type of the value is a string.
     if (typeof value === 'string') {
       // Resolve value.
-      const resolvedValue = value.endsWith(sep) ? value : value + sep
+      const resolvedValue = value.endsWith('/') ? value : value + '/'
 
       // Resolve alias.
-      const resolvedAlias = alias.endsWith(sep) ? alias : alias + sep
+      const resolvedAlias = alias.endsWith('/') ? alias : alias + '/'
 
       // Only handle if `resolvedValue` starts with `resolvedAlias`.
       if (resolvedValue.startsWith(resolvedAlias)) {
         // Get the absolute path of the origin path.
         const absoluteOrigin = resolve(id)
 
-        // Define the current directory according to the OS.
-        const currentDir = '.' + sep
-
         // Get the target path.
-        const target = currentDir + join(path, value.replace(alias, currentDir))
+        const target = './' + join(path, value.replace(alias, './'))
 
         // Get the absolute path of the target path.
         const absoluteTarget = resolve(target)
 
-        // Generate the relative path from the origin path to the target path.
-        const relativePath = relative(dirname(absoluteOrigin), absoluteTarget)
+        // Get the directory path of the `absoluteOrigin`.
+        const absoluteOriginDir = dirname(absoluteOrigin)
 
-        // Replace the `source.value` with the relative path.
-        source.value = relativePath
+        // Generate the relative path from the origin path to the target path.
+        const relativePath = relative(absoluteOriginDir, absoluteTarget)
+
+        // Validate relative path.
+        const validRelativePath = validateRelativePath(relativePath)
+
+        // Replace the `source.value` with the `validRelativePath`.
+        source.value = validRelativePath
       }
     }
   })

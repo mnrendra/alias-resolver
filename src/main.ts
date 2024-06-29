@@ -21,7 +21,7 @@ const main = (
   // Try-catch to handle any errors.
   try {
     // Extract `path` and `type` from the `source`.
-    const { path, type } = source
+    const { path, type = 'script' } = source
 
     // Parse the `source.code` to `ast`.
     const ast = parse(source.code, { sourceType: type, ecmaVersion: 'latest' })
@@ -47,8 +47,8 @@ const main = (
       throw err
     }
 
-    // Retry by modifying the `source.type`.
-    source.type = 'module'
+    // If the error is regarding the source type, modify the `source.type`.
+    source.type = source.type === 'script' ? 'module' : 'script'
 
     // Reinvoke this function to redo using modified `source.type`.
     main(aliases, source)

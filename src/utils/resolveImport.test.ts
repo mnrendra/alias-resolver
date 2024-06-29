@@ -5,117 +5,137 @@ import * as importsDummy from '@tests/dummies/imports'
 
 import resolveImport from './resolveImport'
 
-describe('Test `resolveImport` to resolve `import` aliases from `./src/main/main.mjs`:', () => {
-  const { path, program } = importsDummy
-  const bodies = program.body as ImportDeclaration[]
+describe('Test `resolveImport` util:', () => {
+  const { program } = importsDummy
 
-  it('Should resolve `@consts` to `../consts` when the path of `@consts` is `./src/consts`!', () => {
-    const body = bodies[0]
+  describe('Test `resolveImport` to resolve `import` aliases from `./src/index.mjs`:', () => {
+    const path = './src/index.mjs'
+    const bodies = program().body as ImportDeclaration[]
 
-    resolveImport(path, aliases)(body, '')
+    it('Should resolve `@consts` to `./consts` when the path of `@consts` is `./src/consts`!', () => {
+      const body = bodies[0]
 
-    const received = body.source.value
-    const expected = '../consts'
+      resolveImport(path, aliases)(body, '')
 
-    expect(received).toBe(expected)
+      const received = body.source.value
+      const expected = './consts'
+
+      expect(received).toBe(expected)
+    })
   })
 
-  it('Should resolve `@consts/urls` to `../consts/urls` when the path of `@consts` is `./src/consts`!', () => {
-    const body = bodies[2]
+  describe('Test `resolveImport` to resolve `import` aliases from `./src/main/main.mjs`:', () => {
+    const path = './src/main/main.mjs'
+    const bodies = program().body as ImportDeclaration[]
 
-    resolveImport(path, aliases)(body, '')
+    it('Should resolve `@consts` to `../consts` when the path of `@consts` is `./src/consts`!', () => {
+      const body = bodies[0]
 
-    const received = body.source.value
-    const expected = '../consts/urls'
+      resolveImport(path, aliases)(body, '')
 
-    expect(received).toBe(expected)
-  })
+      const received = body.source.value
+      const expected = '../consts'
 
-  it('Should resolve `@consts/urls/` to `../consts/urls` when the path of `@consts` is `./src/consts`!', () => {
-    const body = bodies[3]
+      expect(received).toBe(expected)
+    })
 
-    resolveImport(path, aliases)(body, '')
+    it('Should resolve `@consts/urls` to `../consts/urls` when the path of `@consts` is `./src/consts`!', () => {
+      const body = bodies[2]
 
-    const received = body.source.value
-    const expected = '../consts/urls'
+      resolveImport(path, aliases)(body, '')
 
-    expect(received).toBe(expected)
-  })
+      const received = body.source.value
+      const expected = '../consts/urls'
 
-  it('Should resolve `@utils//` to `../utils` when the path of `@utils` is `./src/utils/`!', () => {
-    const body = bodies[4]
+      expect(received).toBe(expected)
+    })
 
-    resolveImport(path, aliases)(body, '')
+    it('Should resolve `@consts/urls/` to `../consts/urls` when the path of `@consts` is `./src/consts`!', () => {
+      const body = bodies[3]
 
-    const received = body.source.value
-    const expected = '../utils'
+      resolveImport(path, aliases)(body, '')
 
-    expect(received).toBe(expected)
-  })
+      const received = body.source.value
+      const expected = '../consts/urls'
 
-  it('Should resolve `@utils/logs/info//` to `../utils/logs/info` when the path of `@utils` is `./src/utils/`!', () => {
-    const body = bodies[5]
+      expect(received).toBe(expected)
+    })
 
-    resolveImport(path, aliases)(body, '')
+    it('Should resolve `@utils//` to `../utils` when the path of `@utils` is `./src/utils/`!', () => {
+      const body = bodies[4]
 
-    const received = body.source.value
-    const expected = '../utils/logs/info'
+      resolveImport(path, aliases)(body, '')
 
-    expect(received).toBe(expected)
-  })
+      const received = body.source.value
+      const expected = '../utils'
 
-  it('Should resolve `../share/services` to `../share/services` when no alias matches!', () => {
-    const body = bodies[6]
+      expect(received).toBe(expected)
+    })
 
-    resolveImport(path, aliases)(body, '')
+    it('Should resolve `@utils/logs/info//` to `../utils/logs/info` when the path of `@utils` is `./src/utils/`!', () => {
+      const body = bodies[5]
 
-    const received = body.source.value
-    const expected = '../share/services'
+      resolveImport(path, aliases)(body, '')
 
-    expect(received).toBe(expected)
-  })
+      const received = body.source.value
+      const expected = '../utils/logs/info'
 
-  it('Should resolve `../share` to `../share` when no alias matches!', () => {
-    const body = bodies[7]
+      expect(received).toBe(expected)
+    })
 
-    resolveImport(path, aliases)(body, '')
+    it('Should resolve `../share/services` to `../share/services` when no alias matches!', () => {
+      const body = bodies[6]
 
-    const received = body.source.value
-    const expected = '../share'
+      resolveImport(path, aliases)(body, '')
 
-    expect(received).toBe(expected)
-  })
+      const received = body.source.value
+      const expected = '../share/services'
 
-  it('Should resolve `@/share` to `../share` when the path of `@` is `./src`!', () => {
-    const body = bodies[8]
+      expect(received).toBe(expected)
+    })
 
-    resolveImport(path, aliases)(body, '')
+    it('Should resolve `../share` to `../share` when no alias matches!', () => {
+      const body = bodies[7]
 
-    const received = body.source.value
-    const expected = '../share'
+      resolveImport(path, aliases)(body, '')
 
-    expect(received).toBe(expected)
-  })
+      const received = body.source.value
+      const expected = '../share'
 
-  it('Should resolve `@tests` to `../../tests` when the path of `@tests` is `./tests`!', () => {
-    const body = bodies[9]
+      expect(received).toBe(expected)
+    })
 
-    resolveImport(path, aliases)(body, '')
+    it('Should resolve `@/share` to `../share` when the path of `@` is `./src`!', () => {
+      const body = bodies[8]
 
-    const received = body.source.value
-    const expected = '../../tests'
+      resolveImport(path, aliases)(body, '')
 
-    expect(received).toBe(expected)
-  })
+      const received = body.source.value
+      const expected = '../share'
 
-  it('Should resolve `@tests/mocks` to `../../tests/mocks` when the path of `@tests` is `./tests`!', () => {
-    const body = bodies[11]
+      expect(received).toBe(expected)
+    })
 
-    resolveImport(path, aliases)(body, '')
+    it('Should resolve `@tests` to `../../tests` when the path of `@tests` is `./tests`!', () => {
+      const body = bodies[9]
 
-    const received = body.source.value
-    const expected = '../../tests/mocks'
+      resolveImport(path, aliases)(body, '')
 
-    expect(received).toBe(expected)
+      const received = body.source.value
+      const expected = '../../tests'
+
+      expect(received).toBe(expected)
+    })
+
+    it('Should resolve `@tests/mocks` to `../../tests/mocks` when the path of `@tests` is `./tests`!', () => {
+      const body = bodies[11]
+
+      resolveImport(path, aliases)(body, '')
+
+      const received = body.source.value
+      const expected = '../../tests/mocks'
+
+      expect(received).toBe(expected)
+    })
   })
 })
