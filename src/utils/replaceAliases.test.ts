@@ -4,8 +4,25 @@ import * as requiresDummy from '@tests/dummies/requires'
 import replaceAliases from './replaceAliases'
 
 describe('Test `replaceAliases` util:', () => {
+  describe('Test `import` aliases from `./src/index.mjs`:', () => {
+    const { literal } = importsDummy
+    const path = './src/index.mjs'
+
+    it('Should resolve `@utils` to `./utils` when the path of `@utils` is `./src/utils`!', () => {
+      const source = { ...literal, value: '@utils' }
+
+      replaceAliases(path, source, [{ alias: '@utils', path: './src/utils' }])
+
+      const received = source.value
+      const expected = './utils'
+
+      expect(received).toBe(expected)
+    })
+  })
+
   describe('Test `import` aliases from `./src/main/main.mjs`:', () => {
-    const { path, literal } = importsDummy
+    const { literal } = importsDummy
+    const path = './src/main/main.mjs'
 
     it('Should resolve `@consts` to `../consts` when the path of `@consts` is `./src/consts`!', () => {
       const source = { ...literal, value: '@consts' }
@@ -151,8 +168,25 @@ describe('Test `replaceAliases` util:', () => {
     })
   })
 
+  describe('Test `require` aliases from `./src/index.js`:', () => {
+    const { literal } = requiresDummy
+    const path = './src/index.js'
+
+    it('Should resolve `@utils` to `./utils` when the path of `@utils` is `./src/utils`!', () => {
+      const source = { ...literal, value: '@utils' }
+
+      replaceAliases(path, source, [{ alias: '@utils', path: './src/utils' }])
+
+      const received = source.value
+      const expected = './utils'
+
+      expect(received).toBe(expected)
+    })
+  })
+
   describe('Test `require` aliases from `./src/main/main.js`:', () => {
-    const { path, literal } = requiresDummy
+    const { literal } = requiresDummy
+    const path = './src/main/main.js'
 
     it('Should resolve `@consts` to `../consts` when the path of `@consts` is `./src/consts`!', () => {
       const source = { ...literal, value: '@consts' }

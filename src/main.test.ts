@@ -38,7 +38,7 @@ describe('Test main feature:', () => {
         throw new Error(ERROR_MESSAGE)
       })
 
-      mockedParse.mockReturnValueOnce(importsDummy.program)
+      mockedParse.mockReturnValueOnce(importsDummy.program())
     })
 
     afterAll(() => {
@@ -85,6 +85,14 @@ describe('Test main feature:', () => {
         const expected = importsDummy.expectedCode
         expect(received).toBe(expected)
       })
+
+      it('Should resolve all `import` aliases from the `source.code` in the same directory!', () => {
+        const source = importsDummy.sourceInSameDir()
+        main(aliases, source)
+        const received = source.code
+        const expected = importsDummy.expectedCodeInSameDir
+        expect(received).toBe(expected)
+      })
     })
 
     describe('Test the `script` source code:', () => {
@@ -111,6 +119,14 @@ describe('Test main feature:', () => {
         main(aliases, source)
         const received = source.code
         const expected = requiresDummy.expectedCode
+        expect(received).toBe(expected)
+      })
+
+      it('Should resolve all `require` aliases from the `source.code` in the same directory!', () => {
+        const source = requiresDummy.sourceInSameDir()
+        main(aliases, source)
+        const received = source.code
+        const expected = requiresDummy.expectedCodeInSameDir
         expect(received).toBe(expected)
       })
     })
