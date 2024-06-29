@@ -21,7 +21,7 @@ const main = (
   // Try-catch to handle any errors.
   try {
     // Extract `path` and `type` from the `source`.
-    const { path, type } = source
+    const { path, type = 'script' } = source
 
     // Parse the `source.code` to `ast`.
     const ast = parse(source.code, { sourceType: type, ecmaVersion: 'latest' })

@@ -67,8 +67,26 @@ describe('Test main feature:', () => {
       expect(received).toBe(expected)
     })
 
+    it('Should resolve all `import` aliases from the `source.code` without `source.type`!', () => {
+      const source = importsDummy.source()
+      delete source.type
+      main(aliases, source)
+      const received = source.code
+      const expected = importsDummy.expectedCode
+      expect(received).toBe(expected)
+    })
+
     it('Should resolve all `require` aliases from the `source.code`!', () => {
       const source = requiresDummy.source()
+      main(aliases, source)
+      const received = source.code
+      const expected = requiresDummy.expectedCode
+      expect(received).toBe(expected)
+    })
+
+    it('Should resolve all `require` aliases from the `source.code` without `source.type`!', () => {
+      const source = requiresDummy.source()
+      delete source.type
       main(aliases, source)
       const received = source.code
       const expected = requiresDummy.expectedCode
