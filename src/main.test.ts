@@ -1,4 +1,4 @@
-import { ERROR_MESSAGE } from '@consts'
+import { ERROR_MESSAGE } from '@/consts'
 
 import mockedParse from '@tests/mocks/parse'
 import unmockParse from '@tests/unmocks/parse'
