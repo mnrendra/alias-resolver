@@ -1,6 +1,5 @@
 import type { SimpleVisitors } from 'acorn-walk'
-
-import type { Aliases } from '../types'
+import type { Aliases } from '@mnrendra/types-aliases'
 
 import replaceAliases from './replaceAliases'
 

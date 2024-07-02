@@ -63,7 +63,8 @@ console.log(source.code) // Output: import foo from '../foo';import { mocks } fr
 # Types
 ```typescript
 import type {
-  Aliases,
+  Aliases, // Exported from '@mnrendra/types-aliases'.
+  Alias, // Exported from '@mnrendra/types-aliases'.
   Source
 } from '@mnrendra/alias-resolver'
 ```

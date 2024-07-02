@@ -1,4 +1,6 @@
-import type { Aliases, Source } from './types'
+import type { Aliases } from '@mnrendra/types-aliases'
+
+import type { Source } from './types'
 
 import { parse } from 'acorn'
 import { simple } from 'acorn-walk'

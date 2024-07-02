@@ -1,6 +1,6 @@
 import type { Literal, Options, Program } from 'acorn'
 
-import type { Source } from '@types'
+import type { Source } from '@/types'
 
 import { resolve } from 'node:path'
 
