@@ -1,6 +1,5 @@
 import type { Literal } from 'acorn'
-
-import type { Aliases } from '../types'
+import type { Aliases } from '@mnrendra/types-aliases'
 
 import { dirname, join, relative, resolve } from 'node:path'
 
