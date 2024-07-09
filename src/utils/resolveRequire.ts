@@ -1,5 +1,4 @@
-import type { SimpleVisitors } from 'acorn-walk'
-import type { Aliases } from '@mnrendra/types-aliases'
+import type { Aliases, ResolveRequire } from '../types'
 
 import replaceAliases from './replaceAliases'
 
@@ -14,7 +13,7 @@ import replaceAliases from './replaceAliases'
 const resolveRequire = <State>(
   id: string,
   aliases: Aliases
-): Exclude<SimpleVisitors<State>['CallExpression'], undefined> => ({
+): ResolveRequire<State> => ({
     callee,
     arguments: sources
   }): void => {
