@@ -1,5 +1,4 @@
-import type { SimpleVisitors } from 'acorn-walk'
-import type { Aliases } from '@mnrendra/types-aliases'
+import type { Aliases, ResolveImport } from '../types'
 
 import replaceAliases from './replaceAliases'
 
@@ -14,7 +13,7 @@ import replaceAliases from './replaceAliases'
 const resolveImport = <State>(
   id: string,
   aliases: Aliases
-): Exclude<SimpleVisitors<State>['ImportDeclaration'], undefined> => ({
+): ResolveImport<State> => ({
     source
   }): void => {
     // Only handle if `source.value` is valid stringified code.

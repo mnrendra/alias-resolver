@@ -1,6 +1,13 @@
 import type { Options } from 'acorn'
 
-interface Source {
+export type SourceType = Options['sourceType']
+
+/**
+ * `@mnrendra/alias-resolver` source object.
+ *
+ * @see https://npmjs.com/package/@mnrendra/alias-resolver
+ */
+export interface Source {
   /**
    * The absolute path of the code.
    */
@@ -16,7 +23,5 @@ interface Source {
    *
    * @default 'script'
    */
-  type?: Options['sourceType']
+  type?: SourceType
 }
-
-export default Source
