@@ -1,10 +1,10 @@
 import { ERROR_MESSAGE } from '@/consts'
 
-import mockedParse from '@tests/mocks/parse'
-import unmockParse from '@tests/unmocks/parse'
 import aliases from '@tests/dummies/aliases'
 import * as importsDummy from '@tests/dummies/imports'
 import * as requiresDummy from '@tests/dummies/requires'
+import mockedParse from '@tests/mocks/parse'
+import unmockParse from '@tests/unmocks/parse'
 
 import main from './main'
 
@@ -14,6 +14,8 @@ jest.mock('acorn', () => ({
 
 describe('Test main feature:', () => {
   describe('By mocking `acorn` to throw a non-`ERROR_MESSAGE` error:', () => {
+    const { case1 } = importsDummy
+
     beforeAll(() => {
       mockedParse.mockImplementationOnce(() => {
         throw new Error('any error message')
@@ -25,14 +27,19 @@ describe('Test main feature:', () => {
     })
 
     it('Should throw an error!', () => {
-      const source = importsDummy.source()
-      const received = (): void => { main(aliases, source) }
+      const { source } = case1
+      const src = source()
+
+      const received = (): void => { main(src, aliases) }
       const expected = Error('any error message')
+
       expect(received).toThrow(expected)
     })
   })
 
   describe('By mocking `acorn` to throw an `ERROR_MESSAGE` error:', () => {
+    const { case2 } = importsDummy
+
     beforeAll(() => {
       mockedParse.mockImplementationOnce(() => {
         throw new Error(ERROR_MESSAGE)
@@ -46,10 +53,13 @@ describe('Test main feature:', () => {
     })
 
     it('Should resolve all `import` aliases from the `source.code`!', () => {
-      const source = importsDummy.source()
-      main(aliases, source)
-      const received = source.code
-      const expected = importsDummy.expectedCode
+      const { source, expected } = case2
+      const src = source()
+
+      main(src, aliases)
+
+      const received = src.code
+
       expect(received).toBe(expected)
     })
   })
@@ -60,73 +70,105 @@ describe('Test main feature:', () => {
     })
 
     describe('Test the `module` source code:', () => {
+      const { case1, case2 } = importsDummy
+
       it('Should resolve all `import` aliases from the `source.code`!', () => {
-        const source = importsDummy.source()
-        main(aliases, source)
-        const received = source.code
-        const expected = importsDummy.expectedCode
+        const { source, expected } = case2
+        const src = source()
+
+        main(src, aliases)
+
+        const received = src.code
+
         expect(received).toBe(expected)
       })
 
       it('Should resolve all `import` aliases from the `source.code` without `source.type`!', () => {
-        const source = importsDummy.source()
-        delete source.type
-        main(aliases, source)
-        const received = source.code
-        const expected = importsDummy.expectedCode
+        const { source, expected } = case2
+        const src = source()
+
+        delete src.type
+
+        main(src, aliases)
+
+        const received = src.code
+
         expect(received).toBe(expected)
       })
 
       it('Should resolve all `import` aliases from the `source.code` by reversing the source type!', () => {
-        const source = importsDummy.source()
-        source.type = 'script'
-        main(aliases, source)
-        const received = source.code
-        const expected = importsDummy.expectedCode
+        const { source, expected } = case2
+        const src = source()
+
+        src.type = 'script'
+
+        main(src, aliases)
+
+        const received = src.code
+
         expect(received).toBe(expected)
       })
 
       it('Should resolve all `import` aliases from the `source.code` in the same directory!', () => {
-        const source = importsDummy.sourceInSameDir()
-        main(aliases, source)
-        const received = source.code
-        const expected = importsDummy.expectedCodeInSameDir
+        const { source, expected } = case1
+        const src = source()
+
+        main(src, aliases)
+
+        const received = src.code
+
         expect(received).toBe(expected)
       })
     })
 
     describe('Test the `script` source code:', () => {
+      const { case1, case2 } = requiresDummy
+
       it('Should resolve all `require` aliases from the `source.code`!', () => {
-        const source = requiresDummy.source()
-        main(aliases, source)
-        const received = source.code
-        const expected = requiresDummy.expectedCode
+        const { source, expected } = case2
+        const src = source()
+
+        main(src, aliases)
+
+        const received = src.code
+
         expect(received).toBe(expected)
       })
 
       it('Should resolve all `require` aliases from the `source.code` without `source.type`!', () => {
-        const source = requiresDummy.source()
-        delete source.type
-        main(aliases, source)
-        const received = source.code
-        const expected = requiresDummy.expectedCode
+        const { source, expected } = case2
+        const src = source()
+
+        delete src.type
+
+        main(src, aliases)
+
+        const received = src.code
+
         expect(received).toBe(expected)
       })
 
       it('Should resolve all `require` aliases from the `source.code` by reversing the source type!', () => {
-        const source = requiresDummy.source()
-        source.type = 'module'
-        main(aliases, source)
-        const received = source.code
-        const expected = requiresDummy.expectedCode
+        const { source, expected } = case2
+        const src = source()
+
+        src.type = 'module'
+
+        main(src, aliases)
+
+        const received = src.code
+
         expect(received).toBe(expected)
       })
 
       it('Should resolve all `require` aliases from the `source.code` in the same directory!', () => {
-        const source = requiresDummy.sourceInSameDir()
-        main(aliases, source)
-        const received = source.code
-        const expected = requiresDummy.expectedCodeInSameDir
+        const { source, expected } = case1
+        const src = source()
+
+        main(src, aliases)
+
+        const received = src.code
+
         expect(received).toBe(expected)
       })
     })

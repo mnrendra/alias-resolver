@@ -1,8 +1,10 @@
-import { resolve } from 'node:path'
+import { normalize, resolve } from 'node:path'
 
 import validateRelativePath from './validateRelativePath'
 
 describe('Test `validateRelativePath` util:', () => {
+  const foo = normalize(resolve('foo'))
+
   it('Should return `./foo` when given `foo`!', () => {
     const received = validateRelativePath('foo')
     const expected = './foo'
@@ -21,9 +23,9 @@ describe('Test `validateRelativePath` util:', () => {
     expect(received).toBe(expected)
   })
 
-  it(`Should return \`${resolve('foo')}\` when given \`${resolve('foo')}\`!`, () => {
-    const received = validateRelativePath(resolve('foo'))
-    const expected = resolve('foo')
+  it(`Should return \`${foo}\` when given \`${foo}\`!`, () => {
+    const received = validateRelativePath(foo)
+    const expected = foo
     expect(received).toBe(expected)
   })
 })

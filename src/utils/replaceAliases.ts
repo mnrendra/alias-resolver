@@ -1,7 +1,6 @@
-import type { Literal } from 'acorn'
-import type { Aliases } from '@mnrendra/types-aliases'
+import type { Aliases, Literal } from '../types'
 
-import { dirname, join, relative, resolve } from 'node:path'
+import { dirname, join, normalize, relative, resolve } from 'node:path'
 
 import validateRelativePath from './validateRelativePath'
 
@@ -33,13 +32,13 @@ const replaceAliases = (
       // Only handle if `resolvedValue` starts with `resolvedAlias`.
       if (resolvedValue.startsWith(resolvedAlias)) {
         // Get the absolute path of the origin path.
-        const absoluteOrigin = resolve(id)
+        const absoluteOrigin = normalize(resolve(id))
 
         // Get the target path.
         const target = './' + join(path, value.replace(alias, './'))
 
         // Get the absolute path of the target path.
-        const absoluteTarget = resolve(target)
+        const absoluteTarget = normalize(resolve(target))
 
         // Get the directory path of the `absoluteOrigin`.
         const absoluteOriginDir = dirname(absoluteOrigin)

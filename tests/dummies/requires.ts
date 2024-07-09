@@ -1,16 +1,19 @@
-import type { Literal, Options, Program } from 'acorn'
+import type {
+  Literal,
+  Program,
+  VariableDeclaration,
+  CallExpression,
+  Source,
+  SourceType
+} from '@/types'
 
-import type { Source } from '@/types'
+import { normalize, resolve } from 'node:path'
 
-import { resolve } from 'node:path'
+// common
 
-export const type: Options['sourceType'] = 'script'
+const type: SourceType = 'script'
 
-export const path: string = resolve('./src/main/index.js')
-
-export const pathInSameDir: string = resolve('./src/index.js')
-
-export const code: string = `
+const code: string = `
 /**
  * Imports
  */
@@ -65,7 +68,7 @@ module.exports = {
 }
 `
 
-export const program = (): Program => ({
+const program = (): Program => ({
   type: 'Program',
   start: 0,
   end: 739,
@@ -909,42 +912,29 @@ export const program = (): Program => ({
   sourceType: 'script'
 })
 
-export const literal: Literal = {
+const literal: Literal = {
   type: 'Literal',
   start: 0,
   end: 0
 }
 
-export const expectedCode: string = '' +
-`const consts = require('../consts');
-const {urls} = require('../consts');
-const url = require('../consts/urls');
-const {api} = require('../consts/urls');
-const {logs} = require('../utils');
-const info = require('../utils/logs/info');
-const {login} = require('../share/services');
-const share = require('../share');
-const {apis} = require('../share');
-const tests = require('../../tests');
-const {mocks} = require('../../tests');
-const {data, dummy} = require('../../tests/mocks');
-module.exports = {
-    consts,
-    urls,
-    url,
-    api,
-    logs,
-    info,
-    login,
-    share,
-    apis,
-    tests,
-    mocks,
-    data,
-    dummy
-};`
+const getBody = (
+  idx = 0
+): {
+  callee: CallExpression
+  args: Literal
+} => {
+  const body = program().body as VariableDeclaration[]
+  const callee = body[idx].declarations[0].init as CallExpression
+  const args = callee.arguments[0] as Literal
+  return { callee, args }
+}
 
-export const expectedCodeInSameDir: string = '' +
+// case-1
+
+const path1: string = normalize(resolve('./src/index.js'))
+
+const expected1: string = '' +
 `const consts = require('./consts');
 const {urls} = require('./consts');
 const url = require('./consts/urls');
@@ -973,13 +963,55 @@ module.exports = {
     dummy
 };`
 
-export const source = (): Source => ({
-  path,
-  code,
-  type
-})
+const source1 = (): Source => ({ path: path1, code })
 
-export const sourceInSameDir = (): Source => ({
-  path: pathInSameDir,
-  code
-})
+const case1 = { code, path: path1, expected: expected1, source: source1 }
+
+// case-2
+
+const path2: string = normalize(resolve('./src/main/index.js'))
+
+const expected2: string = '' +
+`const consts = require('../consts');
+const {urls} = require('../consts');
+const url = require('../consts/urls');
+const {api} = require('../consts/urls');
+const {logs} = require('../utils');
+const info = require('../utils/logs/info');
+const {login} = require('../share/services');
+const share = require('../share');
+const {apis} = require('../share');
+const tests = require('../../tests');
+const {mocks} = require('../../tests');
+const {data, dummy} = require('../../tests/mocks');
+module.exports = {
+    consts,
+    urls,
+    url,
+    api,
+    logs,
+    info,
+    login,
+    share,
+    apis,
+    tests,
+    mocks,
+    data,
+    dummy
+};`
+
+const source2 = (): Source => ({ path: path2, code, type })
+
+const case2 = { code, path: path2, expected: expected2, source: source2 }
+
+// exports
+
+export {
+  type,
+  code,
+  program,
+  literal,
+  getBody,
+  case1,
+  case2
+}

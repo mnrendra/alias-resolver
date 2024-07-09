@@ -1,5 +1,5 @@
-import parse from './parse'
+import mockedParse from './parse'
 
 export {
-  parse
+  mockedParse
 }

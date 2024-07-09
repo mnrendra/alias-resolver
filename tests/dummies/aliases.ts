@@ -1,4 +1,4 @@
-import type { Aliases } from '@mnrendra/types-aliases'
+import type { Aliases } from '@/types'
 
 const aliases: Aliases = [
   {

@@ -1,6 +1,4 @@
-import type { Aliases } from '@mnrendra/types-aliases'
-
-import type { Source } from './types'
+import type { Aliases, Source } from './types'
 
 import { parse } from 'acorn'
 import { simple } from 'acorn-walk'
@@ -13,12 +11,12 @@ import { resolveImport, resolveRequire } from './utils'
 /**
  * A utility to resolve alias paths.
  *
- * @param {Aliases} aliases - A list of aliases.
  * @param {Source} source - An object of the source.
+ * @param {Aliases} [aliases] - A list of aliases (optional).
  */
 const main = (
-  aliases: Aliases,
-  source: Source
+  source: Source,
+  aliases: Aliases = []
 ): void => {
   // Try-catch to handle any errors.
   try {
@@ -53,7 +51,7 @@ const main = (
     source.type = source.type === 'script' ? 'module' : 'script'
 
     // Reinvoke this function to redo using modified `source.type`.
-    main(aliases, source)
+    main(source, aliases)
   }
 }
 

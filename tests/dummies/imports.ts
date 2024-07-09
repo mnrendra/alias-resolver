@@ -1,16 +1,18 @@
-import type { Literal, Options, Program } from 'acorn'
+import type {
+  Literal,
+  Program,
+  ImportDeclaration,
+  Source,
+  SourceType
+} from '@/types'
 
-import type { Source } from '@/types'
+import { normalize, resolve } from 'node:path'
 
-import { resolve } from 'node:path'
+// common
 
-export const type: Options['sourceType'] = 'module'
+const type: SourceType = 'module'
 
-export const path: string = resolve('./src/main/index.mjs')
-
-export const pathInSameDir: string = resolve('./src/index.mjs')
-
-export const code: string = `
+const code: string = `
 /**
  * Imports
  */
@@ -68,7 +70,7 @@ export {
 }
 `
 
-export const program = (): Program => ({
+const program = (): Program => ({
   type: 'Program',
   start: 0,
   end: 739,
@@ -751,48 +753,28 @@ export const program = (): Program => ({
   sourceType: 'module'
 })
 
-export const literal: Literal = {
+const literal: Literal = {
   type: 'Literal',
   start: 0,
   end: 0
 }
 
-export const expectedCode: string = '' +
-`import * as consts from '../consts';
-import { urls as url } from '../consts';
-import * as urls from '../consts/urls';
-import { api } from '../consts/urls';
-import utils, { logs } from '../utils';
-import info from '../utils/logs/info';
-import { login } from '../share/services';
-import * as share from '../share';
-import sanity, { apis } from '../share';
-import * as tests from '../../tests';
-import { mocks } from '../../tests';
-import mock, {
-    data,
-    dummy
-} from '../../tests/mocks';
-export {
-    consts,
-    url,
-    urls,
-    api,
-    utils,
-    logs,
-    info,
-    login,
-    share,
-    sanity,
-    apis,
-    tests,
-    mocks,
-    mock,
-    data,
-    dummy
-};`
+const getBody = (
+  idx = 0
+): {
+  body: ImportDeclaration
+  source: Literal
+} => {
+  const bodies = program().body as ImportDeclaration[]
+  const body = bodies[idx]
+  return { body, source: body.source }
+}
 
-export const expectedCodeInSameDir: string = '' +
+// case-1
+
+const path1: string = normalize(resolve('./src/index.mjs'))
+
+const expected1: string = '' +
 `import * as consts from './consts';
 import { urls as url } from './consts';
 import * as urls from './consts/urls';
@@ -827,13 +809,61 @@ export {
     dummy
 };`
 
-export const source = (): Source => ({
-  path,
-  code,
-  type
-})
+export const source1 = (): Source => ({ path: path1, code })
 
-export const sourceInSameDir = (): Source => ({
-  path: pathInSameDir,
-  code
-})
+const case1 = { code, path: path1, expected: expected1, source: source1 }
+
+// case-2
+
+const path2: string = normalize(resolve('./src/main/index.mjs'))
+
+const expected2: string = '' +
+`import * as consts from '../consts';
+import { urls as url } from '../consts';
+import * as urls from '../consts/urls';
+import { api } from '../consts/urls';
+import utils, { logs } from '../utils';
+import info from '../utils/logs/info';
+import { login } from '../share/services';
+import * as share from '../share';
+import sanity, { apis } from '../share';
+import * as tests from '../../tests';
+import { mocks } from '../../tests';
+import mock, {
+    data,
+    dummy
+} from '../../tests/mocks';
+export {
+    consts,
+    url,
+    urls,
+    api,
+    utils,
+    logs,
+    info,
+    login,
+    share,
+    sanity,
+    apis,
+    tests,
+    mocks,
+    mock,
+    data,
+    dummy
+};`
+
+export const source2 = (): Source => ({ path: path2, code, type })
+
+const case2 = { code, path: path2, expected: expected2, source: source2 }
+
+// exports
+
+export {
+  type,
+  code,
+  program,
+  literal,
+  getBody,
+  case1,
+  case2
+}
