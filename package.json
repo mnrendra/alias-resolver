@@ -1,6 +1,6 @@
 {
   "name": "@mnrendra/alias-resolver",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A utility to resolve alias paths.",
   "private": false,
   "main": "dist/index.js",
