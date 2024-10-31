@@ -1,4 +1,4 @@
-import type originalModule from 'acorn'
+import type * as originalModule from 'acorn'
 
 import type mockedModule from '@tests/mocks/parse'
 

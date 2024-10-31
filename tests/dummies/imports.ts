@@ -98,7 +98,8 @@ const program = (): Program => ({
         end: 65,
         value: '@consts',
         raw: "'@consts'"
-      }
+      },
+      attributes: []
     },
     {
       type: 'ImportDeclaration',
@@ -129,7 +130,8 @@ const program = (): Program => ({
         end: 103,
         value: '@consts',
         raw: '"@consts"'
-      }
+      },
+      attributes: []
     },
     {
       type: 'ImportDeclaration',
@@ -154,7 +156,8 @@ const program = (): Program => ({
         end: 140,
         value: '@consts/urls/',
         raw: "'@consts/urls/'"
-      }
+      },
+      attributes: []
     },
     {
       type: 'ImportDeclaration',
@@ -185,7 +188,8 @@ const program = (): Program => ({
         end: 176,
         value: '@consts/urls/',
         raw: '"@consts/urls/"'
-      }
+      },
+      attributes: []
     },
     {
       type: 'ImportDeclaration',
@@ -227,7 +231,8 @@ const program = (): Program => ({
         end: 225,
         value: '@utils//',
         raw: "'@utils//'"
-      }
+      },
+      attributes: []
     },
     {
       type: 'ImportDeclaration',
@@ -252,7 +257,8 @@ const program = (): Program => ({
         end: 261,
         value: '@utils/logs/info//',
         raw: '"@utils/logs/info//"'
-      }
+      },
+      attributes: []
     },
     {
       type: 'ImportDeclaration',
@@ -283,7 +289,8 @@ const program = (): Program => ({
         end: 316,
         value: '../share/services',
         raw: "'../share/services'"
-      }
+      },
+      attributes: []
     },
     {
       type: 'ImportDeclaration',
@@ -308,7 +315,8 @@ const program = (): Program => ({
         end: 351,
         value: '../share',
         raw: '"../share"'
-      }
+      },
+      attributes: []
     },
     {
       type: 'ImportDeclaration',
@@ -350,7 +358,8 @@ const program = (): Program => ({
         end: 390,
         value: '@/share',
         raw: "'@/share'"
-      }
+      },
+      attributes: []
     },
     {
       type: 'ImportDeclaration',
@@ -375,7 +384,8 @@ const program = (): Program => ({
         end: 434,
         value: '@tests',
         raw: "'@tests'"
-      }
+      },
+      attributes: []
     },
     {
       type: 'ImportDeclaration',
@@ -406,7 +416,8 @@ const program = (): Program => ({
         end: 468,
         value: '@tests',
         raw: '"@tests"'
-      }
+      },
+      attributes: []
     },
     {
       type: 'ImportDeclaration',
@@ -465,7 +476,8 @@ const program = (): Program => ({
         end: 521,
         value: '@tests/mocks',
         raw: '"@tests/mocks"'
-      }
+      },
+      attributes: []
     },
     {
       type: 'ExportNamedDeclaration',
@@ -747,7 +759,8 @@ const program = (): Program => ({
           }
         }
       ],
-      source: null
+      source: null,
+      attributes: []
     }
   ],
   sourceType: 'module'

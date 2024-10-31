@@ -1,12 +1,10 @@
-import { ERROR_MESSAGE } from '@/consts'
-
 import aliases from '@tests/dummies/aliases'
 import * as importsDummy from '@tests/dummies/imports'
 import * as requiresDummy from '@tests/dummies/requires'
 import mockedParse from '@tests/mocks/parse'
 import unmockParse from '@tests/unmocks/parse'
 
-import { resolveAlias } from '.'
+import { resolveAlias } from '..'
 
 jest.mock('acorn', () => ({
   parse: jest.fn()
@@ -43,7 +41,7 @@ describe('Test all features:', () => {
 
       beforeAll(() => {
         mockedParse.mockImplementationOnce(() => {
-          throw new Error(ERROR_MESSAGE)
+          throw new Error("'import' and 'export' may appear only with 'sourceType: module'")
         })
 
         mockedParse.mockReturnValueOnce(importsDummy.program())

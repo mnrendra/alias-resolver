@@ -4,8 +4,6 @@ import { parse } from 'acorn'
 import { simple } from 'acorn-walk'
 import { generate } from 'escodegen'
 
-import { ERROR_MESSAGE } from './consts'
-
 import { resolveImport, resolveRequire } from './utils'
 
 /**
@@ -42,7 +40,7 @@ const main = (
       typeof err === 'object' &&
       err !== null &&
       typeof err.message === 'string' &&
-      err.message.split(' (')[0] === ERROR_MESSAGE
+      err.message.split(' (')[0] === "'import' and 'export' may appear only with 'sourceType: module'"
     )) {
       throw err
     }
