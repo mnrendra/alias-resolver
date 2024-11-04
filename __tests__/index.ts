@@ -12,7 +12,7 @@ jest.mock('acorn', () => ({
 
 describe('Test all features:', () => {
   describe('Test `resolveAlias` feature:', () => {
-    describe('By mocking `acorn` to throw a non-`ERROR_MESSAGE` error:', () => {
+    describe('By mocking `acorn` to throw an unknown error:', () => {
       const { case1 } = importsDummy
 
       beforeAll(() => {
@@ -36,7 +36,31 @@ describe('Test all features:', () => {
       })
     })
 
-    describe('By mocking `acorn` to throw an `ERROR_MESSAGE` error:', () => {
+    describe('By mocking `acorn` to throw an error where the `message` is include "\'Unexpected token\'":', () => {
+      const { case1 } = importsDummy
+
+      beforeAll(() => {
+        mockedParse.mockImplementationOnce(() => {
+          throw new Error('Unexpected token')
+        })
+      })
+
+      afterAll(() => {
+        unmockParse(mockedParse)
+      })
+
+      it('Should throw an error!', () => {
+        const { source } = case1
+        const src = source()
+
+        const received = (): void => { resolveAlias(src, aliases) }
+        const expected = Error('Your source code contains an \'Unexpected token\' error or might be in `TypeScript` format, so it cannot be parsed. This module can only parse CommonJS or ESModule formats.')
+
+        expect(received).toThrow(expected)
+      })
+    })
+
+    describe('By mocking `acorn` to throw an error where the `message` is include "\'import\' and \'export\' may appear only with \'sourceType: module\'":', () => {
       const { case2 } = importsDummy
 
       beforeAll(() => {
