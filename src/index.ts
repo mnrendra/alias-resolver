@@ -16,7 +16,8 @@ export type {
   Source,
   SourceType,
   ResolveImport,
-  ResolveRequire
+  ResolveRequire,
+  ResolveDynamicImport
 } from './types'
 
 export {

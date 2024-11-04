@@ -8,7 +8,7 @@ import replaceAliases from './replaceAliases'
  * @param {string} id - Rollup plugin's transform id.
  * @param {Aliases} aliases - A list of aliases.
  *
- * @returns {CallExpression} - `acorn-walk`'s callExpression hook.
+ * @returns {CallExpression} - `acorn-walk`'s CallExpression hook.
  */
 const resolveRequire = <State>(
   id: string,

@@ -8,7 +8,7 @@ import replaceAliases from './replaceAliases'
  * @param {string} id - Rollup plugin's transform id.
  * @param {Aliases} aliases - A list of aliases.
  *
- * @returns {ImportDeclaration} - `acorn-walk`'s importDeclaration hook.
+ * @returns {ImportDeclaration} - `acorn-walk`'s ImportDeclaration hook.
  */
 const resolveImport = <State>(
   id: string,
