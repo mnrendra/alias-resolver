@@ -84,14 +84,6 @@ console.log(source.code) // Output: import foo from '../foo';import { mocks } fr
 ## Types
 ```typescript
 import type {
-  // @mnrendra/types-aliases
-  Aliases,
-  Alias,
-  // @mnrendra/alias-resolver
-  Source,
-  SourceType,
-  ResolveImport,
-  ResolveRequire,
   // acorn
   Literal,
   Program,
@@ -99,7 +91,15 @@ import type {
   VariableDeclaration,
   ImportDeclaration,
   // acorn-walk
-  SimpleVisitors
+  SimpleVisitors,
+  // @mnrendra/types-aliases
+  Aliases,
+  Alias,
+  // @mnrendra/alias-resolver
+  Source,
+  SourceType,
+  ResolveImport,
+  ResolveRequire
 } from '@mnrendra/alias-resolver'
 ```
 
