@@ -17,7 +17,8 @@ export type {
 
 export type {
   ResolveImport,
-  ResolveRequire
+  ResolveRequire,
+  ResolveDynamicImport
 } from './Resolver'
 
 export type {

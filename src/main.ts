@@ -4,7 +4,7 @@ import { parse } from 'acorn'
 import { simple } from 'acorn-walk'
 import { generate } from 'escodegen'
 
-import { resolveImport, resolveRequire } from './utils'
+import { resolveImport, resolveRequire, resolveDynamicImport } from './utils'
 
 /**
  * A utility to resolve alias paths.
@@ -31,7 +31,9 @@ const main = (
       // Resolve `import` aliases.
       ImportDeclaration: resolveImport(path, aliases),
       // Resolve `require` aliases.
-      CallExpression: resolveRequire(path, aliases)
+      CallExpression: resolveRequire(path, aliases),
+      // Resolve `await import` aliases.
+      AwaitExpression: resolveDynamicImport(path, aliases)
     })
 
     // Generate resolved aliases.

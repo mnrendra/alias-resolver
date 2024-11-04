@@ -1,200 +1,129 @@
-import aliases from '@tests/dummies/aliases'
-import * as importsDummy from '@tests/dummies/imports'
-import * as requiresDummy from '@tests/dummies/requires'
+import type { Source } from '@/types'
+
+import { readFileSync } from 'node:fs'
+import { normalize, resolve } from 'node:path'
+
 import mockedParse from '@tests/mocks/parse'
 import unmockParse from '@tests/unmocks/parse'
 
 import { resolveAlias } from '..'
+
+const read = (file: string): string => {
+  return readFileSync(file, { encoding: 'utf8' })
+}
+
+const aliases = [
+  { alias: '@', path: './src/' },
+  { alias: '@consts', path: './src/consts' },
+  { alias: '@utils/', path: './src/utils/' },
+  { alias: '@tests', path: './tests' }
+]
 
 jest.mock('acorn', () => ({
   parse: jest.fn()
 }))
 
 describe('Test all features:', () => {
-  describe('Test `resolveAlias` feature:', () => {
-    describe('By mocking `acorn` to throw an unknown error:', () => {
-      const { case1 } = importsDummy
-
-      beforeAll(() => {
-        mockedParse.mockImplementationOnce(() => {
-          throw new Error('any error message')
-        })
-      })
-
-      afterAll(() => {
-        unmockParse(mockedParse)
-      })
-
-      it('Should throw an error!', () => {
-        const { source } = case1
-        const src = source()
-
-        const received = (): void => { resolveAlias(src, aliases) }
-        const expected = Error('any error message')
-
-        expect(received).toThrow(expected)
+  describe('By mocking `acorn` to throw an unknown error:', () => {
+    beforeAll(() => {
+      mockedParse.mockImplementationOnce(() => {
+        throw new Error('any error message')
       })
     })
 
-    describe('By mocking `acorn` to throw an error where the `message` is include "\'Unexpected token\'":', () => {
-      const { case1 } = importsDummy
-
-      beforeAll(() => {
-        mockedParse.mockImplementationOnce(() => {
-          throw new Error('Unexpected token')
-        })
-      })
-
-      afterAll(() => {
-        unmockParse(mockedParse)
-      })
-
-      it('Should throw an error!', () => {
-        const { source } = case1
-        const src = source()
-
-        const received = (): void => { resolveAlias(src, aliases) }
-        const expected = Error('Your source code contains an \'Unexpected token\' error or might be in `TypeScript` format, so it cannot be parsed. This module can only parse CommonJS or ESModule formats.')
-
-        expect(received).toThrow(expected)
-      })
+    afterAll(() => {
+      unmockParse(mockedParse)
     })
 
-    describe('By mocking `acorn` to throw an error where the `message` is include "\'import\' and \'export\' may appear only with \'sourceType: module\'":', () => {
-      const { case2 } = importsDummy
+    it('Should throw an error!', () => {
+      const src = {
+        code: '',
+        path: ''
+      }
 
-      beforeAll(() => {
-        mockedParse.mockImplementationOnce(() => {
-          throw new Error("'import' and 'export' may appear only with 'sourceType: module'")
-        })
+      const received = (): void => { resolveAlias(src, aliases) }
+      const expected = Error('any error message')
 
-        mockedParse.mockReturnValueOnce(importsDummy.program())
-      })
-
-      afterAll(() => {
-        unmockParse(mockedParse)
-      })
-
-      it('Should resolve all `import` aliases from the `source.code`!', () => {
-        const { source, expected } = case2
-        const src = source()
-
-        resolveAlias(src, aliases)
-
-        const received = src.code
-
-        expect(received).toBe(expected)
-      })
+      expect(received).toThrow(expected)
     })
+  })
 
-    describe('Without mocking anything:', () => {
-      beforeAll(() => {
-        unmockParse(mockedParse)
-      })
+  it('Should throw an "Unexpected token" error when given `./tests/dummies/5.resource.ts`!', () => {
+    const source: Source = {
+      code: read('./tests/dummies/5.resource.ts'),
+      path: ''
+    }
 
-      describe('Test the `module` source code:', () => {
-        const { case1, case2 } = importsDummy
+    const received = (): void => {
+      resolveAlias(source, aliases)
+    }
 
-        it('Should resolve all `import` aliases from the `source.code`!', () => {
-          const { source, expected } = case2
-          const src = source()
+    expect(received).toThrow(Error('Your source code contains an \'Unexpected token\' error or might be in `TypeScript` format, so it cannot be parsed. This module can only parse CommonJS or ESModule formats.'))
+  })
 
-          resolveAlias(src, aliases)
+  it('Should return `./tests/dummies/1.expected.js` when given `./tests/dummies/1.resource.js`!', () => {
+    const resource = read('./tests/dummies/1.resource.js')
+    const resources = resource.split('\n')
 
-          const received = src.code
+    const source = {
+      code: resources.slice(1).join('\n'),
+      path: normalize(resolve(resources[0].split('// ')[1]))
+    }
 
-          expect(received).toBe(expected)
-        })
+    resolveAlias(source, aliases)
 
-        it('Should resolve all `import` aliases from the `source.code` without `source.type`!', () => {
-          const { source, expected } = case2
-          const src = source()
+    const expected = read('./tests/dummies/1.expected.js')
 
-          delete src.type
+    expect(source.code).toBe(expected)
+  })
 
-          resolveAlias(src, aliases)
+  it('Should return `./tests/dummies/2.expected.js` when given `./tests/dummies/2.resource.js`!', () => {
+    const resource = read('./tests/dummies/2.resource.js')
+    const resources = resource.split('\n')
 
-          const received = src.code
+    const source: Source = {
+      code: resources.slice(1).join('\n'),
+      path: normalize(resolve(resources[0].split('// ')[1])),
+      type: 'script'
+    }
 
-          expect(received).toBe(expected)
-        })
+    resolveAlias(source, aliases)
 
-        it('Should resolve all `import` aliases from the `source.code` by reversing the source type!', () => {
-          const { source, expected } = case2
-          const src = source()
+    const expected = read('./tests/dummies/2.expected.js')
 
-          src.type = 'script'
+    expect(source.code).toBe(expected)
+  })
 
-          resolveAlias(src, aliases)
+  it('Should return `./tests/dummies/3.expected.js` when given `./tests/dummies/3.resource.js`!', () => {
+    const resource = read('./tests/dummies/3.resource.js')
+    const resources = resource.split('\n')
 
-          const received = src.code
+    const source = {
+      code: resources.slice(1).join('\n'),
+      path: normalize(resolve(resources[0].split('// ')[1]))
+    }
 
-          expect(received).toBe(expected)
-        })
+    resolveAlias(source, aliases)
 
-        it('Should resolve all `import` aliases from the `source.code` in the same directory!', () => {
-          const { source, expected } = case1
-          const src = source()
+    const expected = read('./tests/dummies/3.expected.js')
 
-          resolveAlias(src, aliases)
+    expect(source.code).toBe(expected)
+  })
 
-          const received = src.code
+  it('Should return `./tests/dummies/4.expected.js` when given `./tests/dummies/4.resource.js`!', () => {
+    const resource = read('./tests/dummies/4.resource.js')
+    const resources = resource.split('\n')
 
-          expect(received).toBe(expected)
-        })
-      })
+    const source: Source = {
+      code: resources.slice(1).join('\n'),
+      path: normalize(resolve(resources[0].split('// ')[1])),
+      type: 'module'
+    }
 
-      describe('Test the `script` source code:', () => {
-        const { case1, case2 } = requiresDummy
+    resolveAlias(source, aliases)
 
-        it('Should resolve all `require` aliases from the `source.code`!', () => {
-          const { source, expected } = case2
-          const src = source()
+    const expected = read('./tests/dummies/4.expected.js')
 
-          resolveAlias(src, aliases)
-
-          const received = src.code
-
-          expect(received).toBe(expected)
-        })
-
-        it('Should resolve all `require` aliases from the `source.code` without `source.type`!', () => {
-          const { source, expected } = case2
-          const src = source()
-
-          delete src.type
-
-          resolveAlias(src, aliases)
-
-          const received = src.code
-
-          expect(received).toBe(expected)
-        })
-
-        it('Should resolve all `require` aliases from the `source.code` by reversing the source type!', () => {
-          const { source, expected } = case2
-          const src = source()
-
-          src.type = 'module'
-
-          resolveAlias(src, aliases)
-
-          const received = src.code
-
-          expect(received).toBe(expected)
-        })
-
-        it('Should resolve all `require` aliases from the `source.code` in the same directory!', () => {
-          const { source, expected } = case1
-          const src = source()
-
-          resolveAlias(src, aliases)
-
-          const received = src.code
-
-          expect(received).toBe(expected)
-        })
-      })
-    })
+    expect(source.code).toBe(expected)
   })
 })
