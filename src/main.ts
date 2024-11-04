@@ -18,8 +18,10 @@ const main = (
 ): void => {
   // Try-catch to handle any errors.
   try {
+    source.type = source.type ?? 'script'
+
     // Extract `path` and `type` from the `source`.
-    const { path, type = 'script' } = source
+    const { path, type } = source
 
     // Parse the `source.code` to `ast`.
     const ast = parse(source.code, { sourceType: type, ecmaVersion: 'latest' })
@@ -34,22 +36,22 @@ const main = (
 
     // Generate resolved aliases.
     source.code = generate(ast)
-  } catch (err: any) {
-    // Throw an error if the error does not pertain to the source type.
-    if (!(
-      typeof err === 'object' &&
-      err !== null &&
-      typeof err.message === 'string' &&
-      err.message.split(' (')[0] === "'import' and 'export' may appear only with 'sourceType: module'"
-    )) {
-      throw err
+  } catch (error) {
+    if (typeof error === 'object' && error !== null && 'message' in error && typeof error.message === 'string') {
+      if (`${error.message}`.includes("'import' and 'export' may appear only with 'sourceType: module'")) {
+        source.type = source.type === 'script' ? 'module' : 'script'
+        main(source, aliases)
+      } else if (`${error.message}`.includes('Unexpected token')) {
+        throw new Error('Your source code contains an \'Unexpected token\' error or might be in `TypeScript` format, so it cannot be parsed. This module can only parse CommonJS or ESModule formats.')
+      } else if (error instanceof Error) {
+        throw error
+      } else {
+        console.error(error)
+        throw new Error('Unknown error!')
+      }
+    } else {
+      throw error
     }
-
-    // If the error is regarding the source type, modify the `source.type`.
-    source.type = source.type === 'script' ? 'module' : 'script'
-
-    // Reinvoke this function to redo using modified `source.type`.
-    main(source, aliases)
   }
 }
 
