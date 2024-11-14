@@ -1,12 +1,5 @@
 import { isAbsolute } from 'node:path'
 
-/**
- * Validate relative path.
- *
- * @param {string} path - A relative path without the `.` prefix.
- *
- * @returns {string} A valid relative path with the `.` prefix.
- */
 const validateRelativePath = (
   path: string
 ): string => {
@@ -19,5 +12,4 @@ const validateRelativePath = (
   return path
 }
 
-// Export `validateRelativePath` as default value.
 export default validateRelativePath

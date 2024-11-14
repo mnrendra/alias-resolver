@@ -1,4 +1,4 @@
-import type { SimpleVisitors } from '.'
+import type { SimpleVisitors } from 'acorn-walk'
 
 type Type = 'ImportDeclaration' | 'CallExpression' | 'AwaitExpression'
 
