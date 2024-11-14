@@ -1,15 +1,9 @@
-import type { Aliases, ResolveRequire } from '../types'
+import type { Aliases } from '@mnrendra/types-aliases'
+
+import type { ResolveRequire } from '../types'
 
 import replaceAliases from './replaceAliases'
 
-/**
- * Resolve `require` aliases.
- *
- * @param {string} id - Rollup plugin's transform id.
- * @param {Aliases} aliases - A list of aliases.
- *
- * @returns {CallExpression} - `acorn-walk`'s CallExpression hook.
- */
 const resolveRequire = <State>(
   id: string,
   aliases: Aliases
@@ -38,5 +32,4 @@ const resolveRequire = <State>(
     }
   }
 
-// Export `resolveRequire` as default value.
 export default resolveRequire

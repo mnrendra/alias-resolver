@@ -1,15 +1,9 @@
-import type { Aliases, ResolveDynamicImport } from '../types'
+import type { Aliases } from '@mnrendra/types-aliases'
+
+import type { ResolveDynamicImport } from '../types'
 
 import replaceAliases from './replaceAliases'
 
-/**
- * Resolve `await import` aliases.
- *
- * @param {string} id - Rollup plugin's transform id.
- * @param {Aliases} aliases - A list of aliases.
- *
- * @returns {AwaitExpression} - `acorn-walk`'s AwaitExpression hook.
- */
 const resolveDynamicImport = <State>(
   id: string,
   aliases: Aliases
@@ -33,5 +27,4 @@ const resolveDynamicImport = <State>(
     }
   }
 
-// Export `resolveDynamicImport` as default value.
 export default resolveDynamicImport

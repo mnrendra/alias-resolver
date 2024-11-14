@@ -1,18 +1,23 @@
 import main from './main'
 
 export type {
-  // acorn
   Literal,
   Program,
   CallExpression,
   VariableDeclaration,
-  ImportDeclaration,
-  // acorn-walk
-  SimpleVisitors,
-  // @mnrendra/types-aliases
+  ImportDeclaration
+} from 'acorn'
+
+export type {
+  SimpleVisitors
+} from 'acorn-walk'
+
+export type {
   Aliases,
-  Alias,
-  // @mnrendra/alias-resolver
+  Alias
+} from '@mnrendra/types-aliases'
+
+export type {
   Source,
   SourceType,
   ResolveImport,

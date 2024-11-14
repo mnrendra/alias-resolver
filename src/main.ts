@@ -1,4 +1,6 @@
-import type { Aliases, Source } from './types'
+import type { Aliases } from '@mnrendra/types-aliases'
+
+import type { Source } from './types'
 
 import { parse } from 'acorn'
 import { simple } from 'acorn-walk'
@@ -11,6 +13,8 @@ import { resolveImport, resolveRequire, resolveDynamicImport } from './utils'
  *
  * @param {Source} source - An object of the source.
  * @param {Aliases} [aliases] - A list of aliases (optional).
+ *
+ * @see https://github.com/mnrendra/alias-resolver#readme
  */
 const main = (
   source: Source,
@@ -57,5 +61,4 @@ const main = (
   }
 }
 
-// Export `main` as default value.
 export default main
