@@ -1,16 +1,10 @@
-import type { Aliases, Literal } from '../types'
+import type { Literal } from 'acorn'
+import type { Aliases } from '@mnrendra/types-aliases'
 
 import { dirname, join, normalize, relative, resolve } from 'node:path'
 
 import validateRelativePath from './validateRelativePath'
 
-/**
- * Replace all aliases with relative paths.
- *
- * @param {string} id - Rollup plugin's transform id.
- * @param {Literal} source - `acorn`'s literal.
- * @param {Aliases} aliases - A list of aliases.
- */
 const replaceAliases = (
   id: string,
   source: Literal,
@@ -56,5 +50,4 @@ const replaceAliases = (
   })
 }
 
-// Export `replaceAliases` as default value.
 export default replaceAliases

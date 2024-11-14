@@ -1,5 +1,5 @@
 # @mnrendra/alias-resolver
-A utility to resolve alias paths. If you are using `TypeScript`, we recommend using [@mnrendra/tsconfig-alias-parser](https://npmjs.com/package/@mnrendra/tsconfig-alias-parser) to automatically parse `tsconfig.json` into [aliases](https://npmjs.com/package/@mnrendra/types-aliases).
+A utility for resolving alias paths. If you are using `TypeScript`, we recommend using [@mnrendra/tsconfig-alias-parser](https://npmjs.com/package/@mnrendra/tsconfig-alias-parser) to automatically parse `tsconfig.json` into [aliases](https://npmjs.com/package/@mnrendra/types-aliases).
 
 ## Features
 - ✅ Resolves alias paths for `require` (CommonJS)

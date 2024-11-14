@@ -1,15 +1,9 @@
-import type { Aliases, ResolveImport } from '../types'
+import type { Aliases } from '@mnrendra/types-aliases'
+
+import type { ResolveImport } from '../types'
 
 import replaceAliases from './replaceAliases'
 
-/**
- * Resolve `import` aliases.
- *
- * @param {string} id - Rollup plugin's transform id.
- * @param {Aliases} aliases - A list of aliases.
- *
- * @returns {ImportDeclaration} - `acorn-walk`'s ImportDeclaration hook.
- */
 const resolveImport = <State>(
   id: string,
   aliases: Aliases
@@ -28,5 +22,4 @@ const resolveImport = <State>(
     }
   }
 
-// Export `resolveImport` as default value.
 export default resolveImport

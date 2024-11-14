@@ -1,16 +1,12 @@
 import type { Source } from '@/types'
 
-import { readFileSync } from 'node:fs'
 import { normalize, resolve } from 'node:path'
 
 import mockedParse from '@tests/mocks/parse'
 import unmockParse from '@tests/unmocks/parse'
+import read from '@tests/utils/read'
 
 import { resolveAlias } from '..'
-
-const read = (file: string): string => {
-  return readFileSync(file, { encoding: 'utf8' })
-}
 
 const aliases = [
   { alias: '@', path: './src/' },
