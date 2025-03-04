@@ -25,7 +25,7 @@
   },
   "homepage": "https://github.com/mnrendra/alias-resolver#readme",
   "dependencies": {
-    "@mnrendra/types-aliases": "^1.1.0",
+    "@mnrendra/types-aliases": "^1.1.1",
     "acorn": "^8.14.0",
     "acorn-walk": "^8.3.4",
     "escodegen": "^2.1.0"
